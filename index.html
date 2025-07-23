@@ -27,10 +27,32 @@
                     <input class="form-control" type="file" id="formFile">
                 </div>
                 <div class="col-sm-6 mb-3">
-                    <button type="submit" class="btn btn-primary" id="submitButton">Upload</button>
+                    <button type="button" class="btn btn-primary" id="submitButton">Upload</button>
                 </div>
             </div>
         </form>
+    <!-- Ticket count table -->
+    <table class="table table-bordered mt-5">
+      <thead">
+        <tr style="text-align: center;">
+          <th style="width: 10%; background-color: #007bff; color: white;">Sl. No.</th>
+          <th style="width: 70%; background-color: #007bff; color: white;">Processor</th>
+          <th style="width: 20%; background-color: #007bff; color: white;">Count</th>
+        </tr>
+      </thead>
+      <tbody id="ticketcounttable">
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2" style="background-color: #007bff; color: white;"><strong></strong></td>
+          <td id="totalcount" style="text-align: center; background-color: #007bff; color: white;">0.00</td>
+        </tr>
+      </tfoot>
+  </table>
+
+  <div class="text-right mt-4">
+    <button type="button" id="exportExcel" class="btn btn-success" disabled>Export to Excel</button>
+  </div>
     </div>
 
     <!-- Bootstrap JS Bundle -->
