@@ -1,0 +1,95 @@
+/* General Body Styles */
+body {
+  background-color: #f8f9fa;
+  padding: 20px;
+  /* Moved from previous inline style */
+}
+
+/*change background of all textboxes*/
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group input[type="email"] {
+  background-color: orange
+    /* Replace #f2f2f2 with your desired color */
+}
+
+/* Container Styling */
+.container {
+  margin-top: 30px;
+}
+
+/* Form Heading Style */
+h4 {
+  color: #343a40;
+  margin-bottom: 20px;
+  /* Increased gap between heading and form */
+}
+
+/* Form Heading Style */
+h5 {
+  color: #343a40;
+  margin-bottom: 20px;
+  /* Increased gap between heading and form */
+}
+
+/* Form Group Styles */
+.form-group select,
+.form-group input {
+  margin-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+  /* Increased gap between form fields */
+}
+
+/* Custom Button Styling for the Product Form */
+#productForm .btn-custom {
+  margin-top: 20px;
+  /* Increased gap between form fields and buttons */
+  margin-right: 10px;
+}
+
+/* Custom Button Styling for the search Form */
+#saleRecordsForm .btn-custom {
+  margin-top: -5px;
+  /* Increased gap between form fields and buttons */
+  margin-right: 5px;
+}
+
+/* Validation Message Style */
+.validationmessage {
+  margin-bottom: 50px;
+}
+
+/* Table Styles */
+table {
+  margin-top: 40px;
+  /* Increased gap between buttons and table */
+}
+
+table thead th {
+  background-color: #007bff;
+  color: white;
+}
+
+/* #inputTable button {
+padding: 5px;
+} */
+
+/* #inputTable tr {
+  height: 5px;
+} */
+#inputTable td {
+  padding: 5px 0px;
+  font-size: medium;
+  vertical-align: middle;
+}
+
+/* Right-aligned Button Container */
+.text-right {
+  text-align: right;
+  margin-top: 30px;
+  /* Space above the button */
+}
