@@ -19,13 +19,10 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Event listener for submit button click - start validation and counting process
     submitButton.addEventListener("click", async () => {
         console.log("Submit button clicked - starting validation");
-        // ticketcounttable.innerHTML = "";
-        // exportExcel.disabled = true;
-        // updateTotal();
         const result = await validateInput(fileInput, alertMessage);
         if (result[0]) {
             console.log("Validation successful, proceeding to count tickets");
-            countTickets(result[1]);
+            countTickets(result[1], result[2]);
         } else {
             console.log("Validation failed, aborting count");
         }
@@ -42,7 +39,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         // Add table data rows
         for (let i = 0; i < rows.length; i++) {
             const cells = rows[i].getElementsByTagName('td');
-            const totalValue = parseFloat(cells[2].textContent) || 0;
+            const totalValue = parseInt(cells[2].textContent) || 0;
             grandTotal += totalValue;
             data.push([
                 cells[0].textContent,
@@ -51,7 +48,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             ]);
         }
         // Add total row
-        data.push(["", "Total Tickets", grandTotal.toFixed(2)]);
+        data.push(["", "Total Tickets", grandTotal.toFixed(0)]);
         console.log("Data prepared for Excel export:", data);
         const ws = XLSX.utils.aoa_to_sheet(data);
         // Center align all cells and set wider column widths
@@ -91,6 +88,7 @@ async function validateInput(fileInput, alertMessage) {
     let isvalid = true; // Flag to track validity
     let message = '';   // Message to display on validation failure
     let exceldata = null;
+    let index = null;
 
     if (!fileInput.files.length) {
         isvalid = false;
@@ -108,7 +106,7 @@ async function validateInput(fileInput, alertMessage) {
         else {
             console.log("File type valid, validating Excel content...");
             const result = await ValidateExcelInput(file);
-            if (!result[0]) {
+            if (result[0] == false) {
                 isvalid = false;
                 message = result[1];
                 console.log("Validation error: Excel content invalid -", message);
@@ -116,6 +114,7 @@ async function validateInput(fileInput, alertMessage) {
             else {
                 console.log("Excel content validated successfully");
                 exceldata = result[2];
+                index = result[0];
             }
         }
     }
@@ -125,7 +124,7 @@ async function validateInput(fileInput, alertMessage) {
         setMessage(alertMessage, message, 'danger');
     }
 
-    return [isvalid, exceldata];
+    return [isvalid, exceldata, index];
 }
 
 // Validate file type based on extension
@@ -150,12 +149,12 @@ async function ValidateExcelInput(file) {
         // Check headers in first row for "Processor"
         for (let index = 0; index < data[0].length; index++) {
             if (data[0][index] == "Processor") {
-                found = true;
+                found = index;
                 console.log(`"Processor" column found at index ${index}`);
                 break;
             }
         }
-        if (!found) {
+        if (found == false) {
             message = "Processor column not found in excel. Counting can't proceed without processor column. Kindly check the excel file.";
             console.log("Validation error:", message);
         }
@@ -195,24 +194,26 @@ function readExcel(file) {
 }
 
 // Count tickets for each processor from Excel data
-function countTickets(data) {
+function countTickets(data, index) {
     console.log('Validation passed. Counting processors with unassigned support...');
     const processorCount = {}; // Object to hold counts per processor
-    for (let i = 1; i < data.length; i++) { // Skip header row
+    for (let i = 1; i < data.length; i++) {
         const row = data[i];
-        let processor = row[5]; // 6th element (index 5)
-        // If processor is empty or just spaces, treat it as "Unassigned"
+        // Skip empty rows (all cells are empty or undefined)
+        if (!row || row.every(cell => cell === undefined || cell === null || cell.toString().trim() === "")) {
+            continue;
+        }
+        let processor = row[index];
         if (!processor || processor.trim() === "") {
             processor = "Unassigned";
         }
-        // Count occurrences
         if (processorCount[processor]) {
             processorCount[processor]++;
         } else {
             processorCount[processor] = 1;
         }
     }
-    console.log("Processor count (with Unassigned):", processorCount);
+    console.log("Processor count:", processorCount);
     addRows(processorCount);
     updateTotal();
 }
